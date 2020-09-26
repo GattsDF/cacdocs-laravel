@@ -1,25 +1,46 @@
 FROM php:7.4-fpm
 
-RUN apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng-dev \
-        libicu-dev \
-        libpq-dev \
-        libxpm-dev \
-        libvpx-dev \
-    && pecl install xdebug \
-    && docker-php-ext-enable xdebug \
-    && pecl install mcrypt-1.0.3 \
-    && docker-php-ext-enable mcrypt \
-#    && docker-php-ext-install -j$(nproc) mcrypt \
-    && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-install -j$(nproc) pgsql \
-    && docker-php-ext-install -j$(nproc) pdo_pgsql \
-    && docker-php-ext-install -j$(nproc) exif \
-    && docker-php-ext-configure gd \
-        --with-freetype=/usr/include/ \
-        --with-jpeg=/usr/include/ \
-        --with-xpm=/usr/lib/x86_64-linux-gnu/ \
+# Download script to install PHP extensions and dependencies
+ADD https://raw.githubusercontent.com/mlocati/docker-php-extension-installer/master/install-php-extensions /usr/local/bin/
+
+RUN chmod uga+x /usr/local/bin/install-php-extensions && sync
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -q \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -qq -y \
+      curl \
+      git \
+      zip unzip \
+    && install-php-extensions \
+      bcmath \
+      bz2 \
+      calendar \
+      exif \
+      gd \
+      intl \
+      ldap \
+      memcached \
+      mysqli \
+      opcache \
+      pdo_mysql \
+      pdo_pgsql \
+      pgsql \
+      redis \
+      soap \
+      xsl \
+      zip \
+      sockets \
+      pdo_sqlsrv \
+      sqlsrv
+# already installed:
+#      iconv \
+#      mbstring \
+
+# Install Composer.
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && ln -s $(composer config --global home) /root/composer
+ENV PATH=$PATH:/root/composer/vendor/bin COMPOSER_ALLOW_SUPERUSER=1
+
+# Install prestissimo (composer plugin). Plugin that downloads packages in parallel to speed up the installation process
+# After release of Composer 2.x, remove prestissimo, because parallelism already merged into Composer 2.x branch:
+# https://github.com/composer/composer/pull/7904
+RUN composer global require hirak/prestissimo
