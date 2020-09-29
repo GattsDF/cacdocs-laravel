@@ -1,92 +1,61 @@
-# docker-php-nginx-postgres-composer
-Docker Compose configuration to run PHP 7.1 with Nginx, PHP-FPM, PostgreSQL 10.1 and Composer.
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
-## Overview
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+</p>
 
-This Docker Compose configuration lets you run easily PHP 7.1 with Nginx, PHP-FPM, PostgreSQL 10.1 and Composer.
-It exposes 4 services:
+## About Laravel
 
-* web (Nginx)
-* php (PHP 7.1 with PHP-FPM)
-* db (PostgreSQL 10.1)
-* composer
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-The PHP image comes with the most commonly used extensions and is configured with xdebug.
-The UUID extension for PostgreSQL has been added.
-Nginx default configuration is set up for Symfony 4 (but can be easily changed) and will serve your working directory.
-Composer is run at boot time and will automatically install the vendors.
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## Install prerequisites
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-For now the project has been tested on Linux only but should run fine on Docker for Windows and Docker for Mac.
+## Learning Laravel
 
-You will need:
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-* [Docker CE](https://docs.docker.com/engine/installation/)
-* [Docker Compose](https://docs.docker.com/compose/install)
-* Git (optional)
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## How to use it
+## Laravel Sponsors
 
-### Starting Docker Compose
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-Checkout the repository or download the sources.
+### Premium Partners
 
-Simply run `docker-compose up` and you are done.
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[Many](https://www.many.co.uk)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- **[OP.GG](https://op.gg)**
 
-Nginx will be available on `localhost:80` and PostgreSQL on `localhost:5432`.
+## Contributing
 
-### Using Composer
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-`docker-compose run composer <cmd>`
+## Code of Conduct
 
-Where `cmd` is any of the available composer command.
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-### Using PostgreSQL
+## Security Vulnerabilities
 
-Default connection:
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-`docker-compose exec db psql -U postgres`
+## License
 
-Using .env file default parameters:
-
-`docker-compose exec db psql -U dbuser dbname`
-
-If you want to connect to the DB from another container (from the `php` one for instance), the host will be the service name: `db`.
-
-### Using PHP
-
-You can execute any command on the `php` container as you would do on any docker-compose container:
-
-`docker-compose exec php php -v`
-
-## Change configuration
-
-### Configuring PHP
-
-To change PHP's configuration edit `.docker/conf/php/php.ini`.
-Same goes for `.docker/conf/php/xdebug.ini`.
-
-You can add any .ini file in this directory, don't forget to map them by adding a new line in the php's `volume` section of the `docker-compose.yml` file.
-
-### Configuring PostgreSQL
-
-Any .sh or .sql file you add in `./.docker/conf/postgres` will be automatically loaded at boot time.
-
-If you want to change the db name, db user and db password simply edit the `.env` file at the project's root.
-
-If you connect to PostgreSQL from localhost a password is not required however from another container you will have to supply it.
-
-## Adding aliases
-
-To avoid typing over and over again the same commands you can add two useful aliases in your shell's configuration (`.bashrc` or `.zshrc` for instance):
-
-```
-alias dcu="docker-compose up"
-alias dcr="docker-compose run"
-alias dce="docker-compose exec"
-```
-
-It then becomes way faster to execute a composer command for instance:
-
-`dcr composer require --dev phpunit/phpunit`
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
