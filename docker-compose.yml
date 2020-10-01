@@ -18,17 +18,19 @@ services:
             - ./.docker/conf/php/php.ini:/usr/local/etc/php/conf.d/php.ini
             - ./.docker/conf/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
             - .:/var/www
+        links:
+            - db:database
     composer:
         image: composer
         volumes:
             - .:/app
         command: install
     db:
-        image: postgres:10.1
+        image: postgres
         restart: always
         environment:
-            - POSTGRES_DB=${DB_NAME}
-            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_DB=${DB_DATABASE}
+            - POSTGRES_USER=${DB_USERNAME}
             - POSTGRES_PASSWORD=${DB_PASSWORD}
         ports:
             - 5432:5432
